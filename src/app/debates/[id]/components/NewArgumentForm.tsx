@@ -6,9 +6,10 @@ import { Plus, X } from 'lucide-react';
 type NewArgumentFormProps = {
   debateId: string;
   type: 'pro' | 'con';
+  onArgumentSubmitted?: () => void;
 };
 
-export default function NewArgumentForm({ debateId, type }: NewArgumentFormProps) {
+export default function NewArgumentForm({ debateId, type, onArgumentSubmitted }: NewArgumentFormProps) {
   const [argument, setArgument] = useState('');
   const [evidence, setEvidence] = useState<string[]>(['']);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -99,6 +100,9 @@ export default function NewArgumentForm({ debateId, type }: NewArgumentFormProps
       // Show success message
       setSuccessMessage('Argument submitted successfully!');
       setTimeout(() => setSuccessMessage(null), 3000); // Clear success message after 3 seconds
+
+      // Notify parent component
+      onArgumentSubmitted?.();
 
     } catch (err) {
       console.error('Error submitting argument:', err);

@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
+import type { Argument } from '@/lib/types/debate';
 
 // Temporary in-memory storage for arguments
-const debateArguments: Record<string, any[]> = {};
+const debateArguments: Record<string, Argument[]> = {};
 
 export async function GET(
   request: NextRequest,
@@ -45,14 +46,16 @@ export async function POST(
     // Parse the body
     const body = await request.json();
 
-    // Create new argument
-    const newArgument = {
+    // Create new argument with all required properties
+    const newArgument: Argument = {
       id: Math.random().toString(36).substr(2, 9),
       content: body.content.trim(),
-      userId: "user1",
+      userId: "user1", // This should come from authentication in production
       createdAt: new Date(),
       evidence: body.evidence,
-      type: body.type
+      type: body.type,
+      votes: [], // Initialize empty votes array
+      fallacyFlags: [] // Initialize empty fallacy flags array
     };
 
     // Store the argument in our temporary storage
